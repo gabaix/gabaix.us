@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Demo - gabaix.us</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <p><a href="/">&larr; Home</a></p>
+
+    <h1>Cookie Demo</h1>
+
+    <div class="section">
+        <h2>Visit Counter</h2>
+        <p>You have visited this page <span class="visit-count" id="visit-count">0</span> times.</p>
+        <p><small>This is stored in a cookie and persists across page reloads.</small></p>
+    </div>
+
+    <div class="section">
+        <h2>Set a Cookie</h2>
+        <input type="text" id="cookie-name" placeholder="Cookie name">
+        <input type="text" id="cookie-value" placeholder="Cookie value">
+        <br>
+        <button onclick="setCookie()">Set Cookie</button>
+    </div>
+
+    <div class="section">
+        <h2>Current Cookies</h2>
+        <div id="cookie-display">No cookies set</div>
+        <br>
+        <button onclick="refreshDisplay()">Refresh</button>
+        <button class="delete" onclick="deleteAllCookies()">Delete All</button>
+    </div>
+
+    <div class="section">
+        <h2>How Cookies Work</h2>
+        <ul>
+            <li><strong>Set:</strong> <code>document.cookie = "name=value"</code></li>
+            <li><strong>Read:</strong> <code>document.cookie</code> returns all cookies</li>
+            <li><strong>Expire:</strong> Set <code>expires</code> or <code>max-age</code></li>
+            <li><strong>Delete:</strong> Set expiration date in the past</li>
+        </ul>
+    </div>
+
+    <script>
+        // Helper: Get a specific cookie by name
+        function getCookie(name) {
+            const cookies = document.cookie.split('; ');
+            for (let cookie of cookies) {
+                const [key, value] = cookie.split('=');
+                if (key === name) return decodeURIComponent(value);
+            }
+            return null;
+        }
+
+        // Helper: Set a cookie (expires in 7 days by default)
+        function setACookie(name, value, days = 7) {
+            const expires = new Date(Date.now() + days * 864e5).toUTCString();
+            document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+        }
+
+        // Helper: Delete a cookie
+        function deleteCookie(name) {
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+        }
+
+        // Visit counter
+        function updateVisitCount() {
+            let visits = parseInt(getCookie('visits')) || 0;
+            visits++;
+            setACookie('visits', visits, 365);
+            document.getElementById('visit-count').textContent = visits;
+        }
+
+        // Set cookie from form
+        function setCookie() {
+            const name = document.getElementById('cookie-name').value.trim();
+            const value = document.getElementById('cookie-value').value.trim();
+            if (name && value) {
+                setACookie(name, value);
+                document.getElementById('cookie-name').value = '';
+                document.getElementById('cookie-value').value = '';
+                refreshDisplay();
+            } else {
+                alert('Please enter both name and value');
+            }
+        }
+
+        // Display all cookies
+        function refreshDisplay() {
+            const display = document.getElementById('cookie-display');
+            if (document.cookie) {
+                display.innerHTML = document.cookie.split('; ').map(c => {
+                    const [name, value] = c.split('=');
+                    return `<strong>${name}</strong>: ${decodeURIComponent(value)}`;
+                }).join('<br>');
+            } else {
+                display.textContent = 'No cookies set';
+            }
+        }
+
+        // Delete all cookies
+        function deleteAllCookies() {
+            document.cookie.split('; ').forEach(cookie => {
+                const name = cookie.split('=')[0];
+                deleteCookie(name);
+            });
+            refreshDisplay();
+            document.getElementById('visit-count').textContent = '0';
+        }
+
+        // Initialize
+        updateVisitCount();
+        refreshDisplay();
+    </script>
+</body>
+</html>
