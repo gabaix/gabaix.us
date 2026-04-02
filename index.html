@@ -22,7 +22,7 @@
             .then(r => r.json())
             .then(data => {
                 const date = new Date(data.commit.committer.date);
-                document.getElementById('deploy-time').textContent = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                document.getElementById('deploy-time').textContent = date.toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
             })
             .catch(() => {
                 document.getElementById('deploy-time').textContent = 'unavailable';
