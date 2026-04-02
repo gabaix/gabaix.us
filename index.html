@@ -15,7 +15,18 @@
             <li><a href="/cookies/">Cookie Demo</a></li>
             <li><a href="https://chess.gabaix.us">Chess Opening Repertoire</a></li>
         </ul>
-        <p><small>Deploy test update on March 25, 2026.</small></p>
+        <p><small>Last deployed: <span id="deploy-time">loading...</span></small></p>
     </div>
+    <script>
+        fetch('https://api.github.com/repos/gabaix/gabaix.us/commits/master')
+            .then(r => r.json())
+            .then(data => {
+                const date = new Date(data.commit.committer.date);
+                document.getElementById('deploy-time').textContent = date.toLocaleString();
+            })
+            .catch(() => {
+                document.getElementById('deploy-time').textContent = 'unavailable';
+            });
+    </script>
 </body>
 </html>
