@@ -10,6 +10,10 @@ h1 {
     color: #333;
 }
 
+ul li {
+    margin-bottom: 0.375em;
+}
+
 .section {
     background: white;
     padding: 1.5rem;
