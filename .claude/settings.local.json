@@ -8,7 +8,9 @@
       "Bash(gh api:*)",
       "Bash(git push:*)",
       "Bash(GIT_SSH_COMMAND=\"ssh -o ConnectTimeout=10\" git push:*)",
-      "Bash(git remote:*)"
+      "Bash(git remote:*)",
+      "Bash(git rm:*)",
+      "Bash(arch:*)"
     ]
   }
 }
